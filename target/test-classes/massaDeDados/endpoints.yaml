@@ -1,0 +1,5 @@
+criarSimulacao: "/simulacoes"
+alterarSimulacao: "/simulacoes/{cpf}"
+consultarSimulacaoComParametro: "/simulacoes/{cpf}"
+deletarSimulacao: "/simulacoes/{cpf}"
+restricao: "/restricoes/{cpf}"

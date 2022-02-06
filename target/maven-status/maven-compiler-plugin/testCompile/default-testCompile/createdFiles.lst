@@ -1,0 +1,8 @@
+utils/Utils.class
+actions/SimulacoesAction.class
+steps/SimulacoesSteps.class
+runners/CucumberRunner.class
+steps/RestricoesSteps.class
+actions/RestricoesAction.class
+models/SimulacaoModel.class
+steps/BaseTest.class
