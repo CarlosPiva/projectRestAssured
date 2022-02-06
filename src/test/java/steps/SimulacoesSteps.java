@@ -1,14 +1,18 @@
 package steps;
 
 import actions.SimulacoesAction;
-import io.cucumber.java.pt.E;
-import io.cucumber.java.pt.Então;
-import io.cucumber.java.pt.Quando;
-import utils.Utils;
+import io.cucumber.java.pt.*;
+
 
 public class SimulacoesSteps {
 
     SimulacoesAction simulacoesAction = new SimulacoesAction();
+
+
+    @Dado("que Carlos tem acesso as funcionalidades referente a simulações")
+    public void queCarlosTemAcessoAsFuncionalidadesReferenteASimulações() {
+    }
+
     @Quando("ele criar uma simulação informando corretamente todos os dados")
     public void eleCriarUmaSimulaçãoInformandoCorretamenteTodosOsDados() {
         simulacoesAction.criarSimulacao();
@@ -40,8 +44,8 @@ public class SimulacoesSteps {
     }
 
     @Quando("ele criar uma simulação informando um valor menor que ao permitido")
-    public void eleCriarUmaSimulaçãoInformandoUmValorMenorQueAoPermitido() {
-        simulacoesAction.criarSimulacaoComValorNaoPermitido("mínimo");
+    public void eleCriarUmaSimulaçãoInformandoUmValorMenorQueAoPermitido() throws Exception {
+        simulacoesAction.criarSimulacaoComValorNaoPermitido("minimo");
     }
 
     @Então("após validação dos dados será exibido uma mensagem informado que o valor é inferior ao permitido")
@@ -50,8 +54,8 @@ public class SimulacoesSteps {
     }
 
     @Quando("ele criar uma simulação informando um valor maior que o permitido")
-    public void eleCriarUmaSimulaçãoInformandoUmValorMaiorQueOPermitido() {
-        simulacoesAction.criarSimulacaoComValorNaoPermitido("máximo");
+    public void eleCriarUmaSimulaçãoInformandoUmValorMaiorQueOPermitido() throws Exception {
+        simulacoesAction.criarSimulacaoComValorNaoPermitido("maximo");
     }
 
     @Então("após validação dos dados será exibido uma mensagem informando que o valor é superior ao permitido")
@@ -60,7 +64,7 @@ public class SimulacoesSteps {
     }
 
     @Quando("ele criar uma simulação informando o número de parcelas inferior ao permitido")
-    public void eleCriarUmaSimulaçãoInformandoONúmeroDeParcelasInferiorAoPermitido() {
+    public void eleCriarUmaSimulaçãoInformandoONúmeroDeParcelasInferiorAoPermitido() throws Exception {
         simulacoesAction.criarSimulacaoNumerosDeParcelasNaoPermitidas("mínimo");
     }
 
@@ -70,7 +74,7 @@ public class SimulacoesSteps {
     }
 
     @Quando("ele criar uma simulação informando o número de parcelas superior ao permitido")
-    public void eleCriarUmaSimulaçãoInformandoONúmeroDeParcelasSuperiorAoPermitido() {
+    public void eleCriarUmaSimulaçãoInformandoONúmeroDeParcelasSuperiorAoPermitido() throws Exception {
         simulacoesAction.criarSimulacaoNumerosDeParcelasNaoPermitidas("máximo");
     }
 
@@ -105,7 +109,7 @@ public class SimulacoesSteps {
     }
 
     @Então("após validação dos dados será exibido uma mensagem informando que a simulação não foi encontrada")
-    public void apósValidaçãoDosDadosSeráExibidoUmaMensagemInformandoQueASimulaçãoNãoFoiEncontrada() {
+    public void apósValidaçãoDosDadosSeráExibidoUmaMensagemInformandoQueASimulaçãoNãoFoiEncontrada() throws Exception {
         simulacoesAction.validarMensagemErro("CPF não encontrado");
     }
 
@@ -141,7 +145,7 @@ public class SimulacoesSteps {
     }
 
     @Então("após validação dos dados será exibido uma mensagem informando que o CPF não possui simulação")
-    public void apósValidaçãoDosDadosSeráExibidoUmaMensagemInformandoQueOCPFNãoPossuiSimulação() {
+    public void apósValidaçãoDosDadosSeráExibidoUmaMensagemInformandoQueOCPFNãoPossuiSimulação() throws Exception {
         simulacoesAction.validarMensagemErro("CPF não encontrado");
     }
 
@@ -151,7 +155,7 @@ public class SimulacoesSteps {
     }
 
     @Então("após a exclusão da simulação será exibido uma mensagem informando que a exclusão foi realizada")
-    public void apósAExclusãoDaSimulaçãoSeráExibidoUmaMensagemInformandoQueAExclusãoFoiRealizada() {
+    public void apósAExclusãoDaSimulaçãoSeráExibidoUmaMensagemInformandoQueAExclusãoFoiRealizada() throws Exception {
         simulacoesAction.validarExclusao("Exclusão com Sucesso");
     }
 
@@ -161,7 +165,7 @@ public class SimulacoesSteps {
     }
 
     @Então("será exibido uma mensagem informando que a simulação não foi encontrada")
-    public void seráExibidoUmaMensagemInformandoQueASimulaçãoNãoFoiEncontrada() {
+    public void seráExibidoUmaMensagemInformandoQueASimulaçãoNãoFoiEncontrada() throws Exception {
         simulacoesAction.validarExclusao("Simulação não encontrada");
     }
 }

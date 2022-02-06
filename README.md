@@ -8,59 +8,39 @@ Execute o seguinte comando no terminal:
 ```sh
 mvn clean test
 ```
-
-### 🔩 Analise os testes de ponta a ponta
-
-Explique que eles verificam esses testes e porquê.
-
+Para executar um cenário específico, execute o comando abaixo informando qual a tag que deseja utilizar:
+```sh
+ mvn test -Dcucumber.options="--tags @NomeDaTag"
 ```
-Dar exemplos
-```
+Toda execução irá criar um diretorio na raiz do projeto chamado "reporter", onde será gerado relatórios dos testes executados
 
-### ⌨️ E testes de estilo de codificação
+### ⌨️ Estrutura do projeto
+O projeto foi estruturado utilizando design pattern Page Objetcs.
+As massas de dados estão em arquivos .yaml dentro do diretorio massaDeDados, utilizei a massa de dados dessa forma para facilitar na manutenção do código.
 
-Explique que eles verificam esses testes e porquê.
-
-```
-Dar exemplos
-```
-
-## 📦 Desenvolvimento
-
-Adicione notas adicionais sobre como implantar isso em um sistema ativo
+Dentro do diretorio java estão os pacotes:
+    - actions
+    - models
+    - runners
+    - steps
+    - utils
+    
+Dentro de resources estão os diretorios
+    - features
+    - massaDeDados
 
 ## 🛠️ Construído com
 
-Mencione as ferramentas que você usou para criar seu projeto
+* [Maven](https://maven.apache.org/)
+* [Gherkin](https://cucumber.io/docs/gherkin/)
+* [Cucumber](https://cucumber.io/)
+* [Rest Assured](https://rest-assured.io/)
+* [jUnit4](https://junit.org/junit4/) 
+* [Java 8](https://www.java.com/pt-BR/download/help/java8_pt-br.html)
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - O framework web usado
-* [Maven](https://maven.apache.org/) - Gerente de Dependência
-* [ROME](https://rometools.github.io/rome/) - Usada para gerar RSS
 
-## 🖇️ Colaborando
+## ✒️ Autor
 
-Por favor, leia o [COLABORACAO.md](https://gist.github.com/usuario/linkParaInfoSobreContribuicoes) para obter detalhes sobre o nosso código de conduta e o processo para nos enviar pedidos de solicitação.
+   Carlos Roberto Piva Junior  [ LinkedIn](www.linkedin.com/in/carlos-piva)
 
-## 📌 Versão
-
-Nós usamos [SemVer](http://semver.org/) para controle de versão. Para as versões disponíveis, observe as [tags neste repositório](https://github.com/suas/tags/do/projeto).
-
-## ✒️ Autores
-
-Mencione todos aqueles que ajudaram a levantar o projeto desde o seu início
-
-* **Um desenvolvedor** - *Trabalho Inicial* - [umdesenvolvedor](https://github.com/linkParaPerfil)
-* **Fulano De Tal** - *Documentação* - [fulanodetal](https://github.com/linkParaPerfil)
-
-Você também pode ver a lista de todos os [colaboradores](https://github.com/usuario/projeto/colaboradores) que participaram deste projeto.
-
-## 📄 Licença
-
-Este projeto está sob a licença (sua licença) - veja o arquivo [LICENSE.md](https://github.com/usuario/projeto/licenca) para detalhes.
-
-## 🎁 Expressões de gratidão
-
-* Conte a outras pessoas sobre este projeto 📢
-* Convide alguém da equipe para uma cerveja 🍺
-* Obrigado publicamente 🤓.
-* etc.
+* **Analista de Qualidade - Testes automatizados**

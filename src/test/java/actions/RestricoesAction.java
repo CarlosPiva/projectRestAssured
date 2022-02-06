@@ -1,6 +1,5 @@
 package actions;
 
-
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
@@ -9,13 +8,14 @@ import utils.Utils;
 
 import static io.restassured.RestAssured.*;
 import static org.junit.Assert.*;
+import static utils.Utils.*;
 
 
 public class RestricoesAction extends BaseTest {
 
     Utils utils = new Utils();
 
-    final String CONSULTA = utils.lerArquivoYaml("endpoints","restricao");
+    final String CONSULTA = lerArquivoYaml("endpoints","restricao");
     Response mensagemConsulta;
     Integer statusCode;
 
@@ -33,7 +33,6 @@ public class RestricoesAction extends BaseTest {
                     .then()
                         .extract()
                             .statusCode();
-
     }
 
     public void validarRestricao(String cpf){

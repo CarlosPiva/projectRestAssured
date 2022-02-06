@@ -1,131 +1,114 @@
 package actions;
 
-import Controllers.SimulacaoController;
 import io.restassured.response.Response;
+import models.SimulacaoModel;
 import org.apache.http.HttpStatus;
 import steps.BaseTest;
 import utils.Utils;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static utils.Utils.lerArquivoYaml;
 
 public class SimulacoesAction extends BaseTest {
 
     Utils utils = new Utils();
-    SimulacaoController dadosSimulacao = new SimulacaoController();
+    SimulacaoModel dadosSimulacao = new SimulacaoModel();
 
-    private final String SIMULACAO = utils.lerArquivoYaml("endpoints","criarSimulacao");
-    private final String ALTERAR_SIMULACAO = utils.lerArquivoYaml("endpoints","alterarSimulacao");
-    private final String CONSULTAR_SIMULACAO = utils.lerArquivoYaml("endpoints", "consultarSimulacaoComParametro");
-    private final String DELETAR_SIMULACAO = utils.lerArquivoYaml("endpoints", "deletarSimulacao");
-    private final String CONTRATO_API = "jsonValidations.json";
+    private final String SIMULACAO = lerArquivoYaml("endpoints","criarSimulacao");
+    private final String ALTERAR_SIMULACAO = lerArquivoYaml("endpoints","alterarSimulacao");
+    private final String CONSULTAR_SIMULACAO = lerArquivoYaml("endpoints", "consultarSimulacaoComParametro");
+    private final String DELETAR_SIMULACAO = lerArquivoYaml("endpoints", "deletarSimulacao");
+
 
     Response responseSimulacao = null;
     Integer statusCode = null;
     String cpf= null;
 
-
-    public void validarContrato(){
-        given()
-                .when()
-                    .get(SIMULACAO)
-                .then()
-                .body(matchesJsonSchemaInClasspath(CONTRATO_API));
-    }
-
     public void criarSimulacao(){
 
         dadosSimulacao.setCpf("656956656");
-        System.out.println(dadosSimulacao.getCpf());
-
         responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 201);
     }
 
     public void verificarSimulacaoCadastradaComSucesso(){
 
-        assertEquals(responseSimulacao.path("nome"), utils.lerArquivoYaml("simulacao", "nome"));
+        assertEquals(responseSimulacao.path("nome"), lerArquivoYaml("simulacao", "nome"));
         assertEquals(responseSimulacao.path("cpf"), dadosSimulacao.getCpf());
-        assertEquals(responseSimulacao.path("email"), utils.lerArquivoYaml("simulacao", "email"));
-        assertEquals(responseSimulacao.path("valor").toString(), utils.lerArquivoYaml("simulacao", "valor"));
-        assertEquals(responseSimulacao.path("parcelas").toString(), utils.lerArquivoYaml("simulacao", "parcelas"));
-        assertEquals(responseSimulacao.path("seguro").toString(), utils.lerArquivoYaml("simulacao", "seguro"));
+        assertEquals(responseSimulacao.path("email"), lerArquivoYaml("simulacao", "email"));
+        assertEquals(responseSimulacao.path("valor").toString(), lerArquivoYaml("simulacao", "valor"));
+        assertEquals(responseSimulacao.path("parcelas").toString(), lerArquivoYaml("simulacao", "parcelas"));
+        assertEquals(responseSimulacao.path("seguro").toString(), lerArquivoYaml("simulacao", "seguro"));
         utils.delete(responseSimulacao.path("id"), DELETAR_SIMULACAO, 200);
     }
 
     public void criarSimulacaoComMesmoCPF(){
 
-        dadosSimulacao.setCpf(utils.lerArquivoYaml("simulacao", "cpfExistente"));
+        dadosSimulacao.setCpf(lerArquivoYaml("simulacao", "cpfExistente"));
         responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 400);
     }
 
     public void validarMensagemCpfExistente(){
 
-        assertEquals(utils.lerArquivoYaml("simulacao","msgCpfExistente"), responseSimulacao.path("mensagem"));
+        assertEquals(lerArquivoYaml("simulacao","msgCpfExistente"), responseSimulacao.path("mensagem"));
     }
 
     public void criarSimulacaoComEmailInvalido(){
 
-        dadosSimulacao.setEmail(utils.lerArquivoYaml("simulacao", "emailInvalido"));
+        dadosSimulacao.setEmail(lerArquivoYaml("simulacao", "emailInvalido"));
         responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 400);
     }
 
     public void validarEmail(){
-        assertEquals(utils.lerArquivoYaml("simulacao", "msgEmailInvalido"), responseSimulacao.path("erros.email"));
+        assertEquals(lerArquivoYaml("simulacao", "msgEmailInvalido"), responseSimulacao.path("erros.email"));
     }
 
-    public void criarSimulacaoComValorNaoPermitido(String valor){
+    public void criarSimulacaoComValorNaoPermitido(String valor) throws Exception {
+        System.out.println(valor);
 
-        switch (valor){
-            case "mínimo":
-
-                dadosSimulacao.setValor(01);
-                responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 400);
-
-                break;
-
-            case "máximo":
-
+        if(valor.equals("minimo")){
+            dadosSimulacao.setValor(01);
+            responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 400);
+        }
+        if(valor.equals("maximo")){
                 dadosSimulacao.setValor(100000);
                 responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 400);
-
-                break;
+        }
+        if(valor != "minimo" && valor!= "maximo"){
+            throw new Exception("Erro - O valor informado é inválido, informar 'mínimo' ou 'máximo'");
         }
     }
 
     public void validarValorMinimo(){
-        assertEquals(utils.lerArquivoYaml("simulacao","msgValorMinimo"), responseSimulacao.path("erros.valor"));
+        assertEquals(lerArquivoYaml("simulacao","msgValorMinimo"), responseSimulacao.path("erros.valor"));
     }
 
     public void validarValorMaximo(){
-        assertEquals(utils.lerArquivoYaml("simulacao","msgValorMaximo"), responseSimulacao.path("erros.valor"));
+        assertEquals(lerArquivoYaml("simulacao","msgValorMaximo"), responseSimulacao.path("erros.valor"));
     }
 
-    public void criarSimulacaoNumerosDeParcelasNaoPermitidas(String parcelas){
+    public void criarSimulacaoNumerosDeParcelasNaoPermitidas(String parcelas) throws Exception {
 
-        switch (parcelas){
-            case "mínimo":
-
-                dadosSimulacao.setParcelas(1);
-                responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 400);
-
-                break;
-
-            case "máximo":
-
-                dadosSimulacao.setParcelas(60);
-                responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 400);
-
-                break;
+        if(parcelas.equals("mínimo")){
+            dadosSimulacao.setParcelas(1);
+            responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 400);
+        }
+        if(parcelas.equals("máximo")){
+            dadosSimulacao.setParcelas(60);
+            responseSimulacao = utils.post(dadosSimulacao, SIMULACAO, 400);
+        }
+        if(parcelas != "mínimo" && parcelas!= "máximo"){
+            throw new Exception("Erro - O valor informado é inválido, informar 'mínimo' ou 'máximo'");
         }
     }
 
     public void validarQuantidadeMinimaDeParcelas(){
-        assertEquals(utils.lerArquivoYaml("simulacao","msgParcelaMinima"), responseSimulacao.path("erros.parcelas"));
+        assertEquals(lerArquivoYaml("simulacao","msgParcelaMinima"), responseSimulacao.path("erros.parcelas"));
     }
 
     public void validarQuantidadeMaximaDeParcelas(){
-        assertEquals(utils.lerArquivoYaml("simulacao","msgParcelaMaxima"), responseSimulacao.path("erros.parcelas"));
+        assertEquals(lerArquivoYaml("simulacao","msgParcelaMaxima"), responseSimulacao.path("erros.parcelas"));
     }
 
     public void criarSimulaçãoSemSeguro(){
@@ -143,7 +126,6 @@ public class SimulacoesAction extends BaseTest {
 
         responseSimulacao = utils.get(SIMULACAO);
         this.cpf = responseSimulacao.path("cpf[1]").toString();
-        System.out.println(cpf);
         dadosSimulacao.setNome("Pedro - Nome Alterado " + System.nanoTime());
         dadosSimulacao.setCpf(cpf);
 
@@ -151,20 +133,20 @@ public class SimulacoesAction extends BaseTest {
     }
 
     public void validarAlteracao(){
-        assertEquals(utils.lerArquivoYaml("simulacao", "cpfExistente"), responseSimulacao.path("cpf"));
+        assertEquals(lerArquivoYaml("simulacao", "cpfExistente"), responseSimulacao.path("cpf"));
         assertEquals(dadosSimulacao.getNome(), responseSimulacao.path("nome"));
     }
 
-    public void validarMensagemErro(String mensagem) {
+    public void validarMensagemErro(String mensagem) throws Exception {
 
-        switch (mensagem) {
-            case "CPF não encontrado":
-                assertEquals(utils.lerArquivoYaml("simulacao", "msgCpfNaoEncontrado"), responseSimulacao.path("mensagem"));
-                break;
-
-            case "CPF existente":
-                validarMensagemCpfExistente();
-                break;
+        if(mensagem.equals("CPF não encontrado")){
+            assertEquals(lerArquivoYaml("simulacao", "msgCpfNaoEncontrado"), responseSimulacao.path("mensagem"));
+        }
+        if(mensagem.equals("CPF existente")){
+            validarMensagemCpfExistente();
+        }
+        if(mensagem!= "CPF não encontrado" && mensagem!= "CPF existente"){
+            throw new Exception("Erro - O valor informado é inválido, informar 'CPF não encontrado' ou 'CPF existente'");
         }
     }
 
@@ -200,20 +182,19 @@ public class SimulacoesAction extends BaseTest {
     public void excluirSimulacao(){
         criarSimulacao();
         Integer id_criado = responseSimulacao.path("id");
-        System.out.println(id_criado);
         responseSimulacao = utils.delete(id_criado, DELETAR_SIMULACAO, 200);
     }
 
-    public void validarExclusao(String mensagem){
+    public void validarExclusao(String mensagem) throws Exception {
 
-        switch (mensagem) {
-            case "Exclusão com Sucesso":
-                assertEquals("OK", responseSimulacao.body().asString());
-                break;
-
-            case "Simulação não encontrada":
-                assertEquals("Simulação não encontrada", responseSimulacao.body().asString());
-                break;
+        if(mensagem.equals("Exclusão com Sucesso")){
+            assertEquals("OK", responseSimulacao.body().asString());
+        }
+        if(mensagem.equals("Simulação não encontrada")){
+            assertEquals("Simulação não encontrada", responseSimulacao.body().asString());
+        }
+        if(mensagem!= "Exclusão com Sucesso" && mensagem!= "Simulação não encontrada"){
+            throw new Exception("Erro - Mensagem inválida, informar 'Exclusão com Sucesso' ou 'Simulação não encontrada'");
         }
     }
 

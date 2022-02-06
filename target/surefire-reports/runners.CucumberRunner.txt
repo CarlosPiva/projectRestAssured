@@ -1,0 +1,7 @@
+-------------------------------------------------------------------------------
+Test set: runners.CucumberRunner
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.237 s <<< FAILURE! - in runners.CucumberRunner
+Consultar uma restrição utilizando um CPF.Consultar uma restrição utilizando CPF  Time elapsed: 1.933 s  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<O CPF 97093236014 [possui restrição]> but was:<O CPF 97093236014 [tem problema]>
+

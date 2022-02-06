@@ -1,12 +1,15 @@
 package steps;
 
 import actions.RestricoesAction;
-import io.cucumber.java.pt.Então;
-import io.cucumber.java.pt.Quando;
+import io.cucumber.java.pt.*;
 
 public class RestricoesSteps {
 
     RestricoesAction restricoesAction = new RestricoesAction();
+
+    @Dado("que Carlos tem acesso as funcionalidades referente a restrição")
+    public void queCarlosTemAcessoAsFuncionalidadesReferenteARestrição() {
+    }
 
     @Quando("Carlos consultar uma restrição utilizando o CPF")
     public void carlosConsultarUmaRestriçãoUtilizandoOCPF() {
